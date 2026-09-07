@@ -1,0 +1,62 @@
+{
+  "player.png": {
+    "w": 87,
+    "h": 96,
+    "source_w": 87,
+    "source_h": 96
+  },
+  "enemy_guard.png": {
+    "w": 92,
+    "h": 96,
+    "source_w": 127,
+    "source_h": 132
+  },
+  "campfire.png": {
+    "w": 86,
+    "h": 96,
+    "source_w": 86,
+    "source_h": 96
+  },
+  "light_lantern.png": {
+    "w": 84,
+    "h": 84,
+    "source_w": 110,
+    "source_h": 110
+  },
+  "cloud.png": {
+    "w": 220,
+    "h": 100,
+    "source_w": 220,
+    "source_h": 100
+  },
+  "stone_pillar.png": {
+    "w": 53,
+    "h": 160,
+    "source_w": 53,
+    "source_h": 160
+  },
+  "switch_lever.png": {
+    "w": 42,
+    "h": 60,
+    "source_w": 65,
+    "source_h": 92
+  },
+  "goal_door.png": {
+    "w": 176,
+    "h": 174,
+    "source_w": 240,
+    "source_h": 237
+  },
+  "light_crystal.png": {
+    "w": 47,
+    "h": 48,
+    "source_w": 82,
+    "source_h": 84
+  },
+  "platform_tile_sq.png": {
+    "w": 48,
+    "h": 48,
+    "source_w": 48,
+    "source_h": 48
+  }
+}

@@ -15,3 +15,18 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+# Python dev venv (used for asset/tooling scripts)
+.venv/
+
+# Web export output
+build/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Generated reference sheets (dev artifacts, optional)
+# assets/sprites/_gallery.png
+# assets/sprites/_level_preview.png

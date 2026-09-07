@@ -1,0 +1,19 @@
+# Normalize line endings for text files on all platforms
+* text=auto eol=lf
+
+# GDScript and docs
+*.gd text eol=lf
+*.tscn text eol=lf
+*.godot text eol=lf
+*.md text eol=lf
+*.cfg text eol=lf
+*.py text eol=lf
+*.yml text eol=lf
+*.svg text eol=lf
+
+# Binary assets declare as binary to avoid mangling
+*.png binary
+*.wav binary
+*.webp binary
+*.ogg binary
+*.jpg binary
