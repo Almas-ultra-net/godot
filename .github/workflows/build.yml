@@ -1,0 +1,110 @@
+name: Build for Web (Godot)
+
+# Builds the project for the Web/HTML5 target on every push/PR, and exposes
+# the resulting build as a downloadable artifact.
+#
+# Godot headless export requires the matching export templates, which are
+# downloaded and installed into the standard export_templates folder below.
+
+on:
+  push:
+    branches: [ main, master, arena/* ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-web:
+    name: Export Web (HTML5)
+    runs-on: ubuntu-latest
+
+    env:
+      # Godot version to use. Keep these in sync when bumping the engine.
+      GODOT_TAG: "4.4-stable"       # release tag (used in download URL)
+      GODOT_DIR: "4.4.stable"       # export templates folder name on disk
+      EXPORT_PRESET: "Web"          # preset name in export_presets.cfg
+      EXPORT_PATH: "build/index.html"
+
+    steps:
+      # ---------------------------------------------------------------
+      # 1) Check out the repository
+      # ---------------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------
+      # 2) Cache the Godot editor binary + export templates
+      #    (speeds up repeated runs; cache key includes the version)
+      # ---------------------------------------------------------------
+      - name: Cache Godot editor & templates
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ runner.temp }}/godot/
+            ${{ runner.temp }}/templates/
+            ~/.local/share/godot/export_templates/
+          key: godot-${{ env.GODOT_TAG }}
+
+      # ---------------------------------------------------------------
+      # 3) Download & unzip the Godot editor binary
+      # ---------------------------------------------------------------
+      - name: Install Godot editor
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cd "${{ runner.temp }}"
+          curl -fsSL -o godot.zip \
+            "https://github.com/godotengine/godot/releases/download/${GODOT_TAG}/Godot_v${GODOT_TAG}_linux.x86_64.zip"
+          unzip -o -q godot.zip
+          chmod +x "Godot_v${GODOT_TAG}_linux.x86_64"
+          mkdir -p godot
+          mv "Godot_v${GODOT_TAG}_linux.x86_64" godot/godot
+          echo "${PWD}/godot" >> "$GITHUB_PATH"
+
+      # ---------------------------------------------------------------
+      # 4) Download & install the export templates for this version
+      # ---------------------------------------------------------------
+      - name: Install export templates
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cd "${{ runner.temp }}"
+          curl -fsSL -o templates.tpz \
+            "https://github.com/godotengine/godot/releases/download/${GODOT_TAG}/Godot_v${GODOT_TAG}_export_templates.tpz"
+          unzip -o -q templates.tpz
+          mkdir -p "$HOME/.local/share/godot/export_templates/${GODOT_DIR}"
+          cp -r templates/* "$HOME/.local/share/godot/export_templates/${GODOT_DIR}/"
+          echo "Templates installed:"
+          ls -la "$HOME/.local/share/godot/export_templates/${GODOT_DIR}/" | head -20
+
+      # ---------------------------------------------------------------
+      # 5) Verify Godot + import the project (generates .godot cache)
+      # ---------------------------------------------------------------
+      - name: Verify Godot & import project
+        shell: bash
+        run: |
+          godot --version
+          godot --headless --path . --import 2>&1 | tail -30
+
+      # ---------------------------------------------------------------
+      # 6) Export a release build for the Web/HTML5 preset
+      # ---------------------------------------------------------------
+      - name: Export Web build
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p "$(dirname "${EXPORT_PATH}")"
+          godot --headless --path . --export-release "${EXPORT_PRESET}" "${EXPORT_PATH}" 2>&1 | tail -40
+          echo "--- build output ---"
+          ls -la "$(dirname "${EXPORT_PATH}")"
+
+      # ---------------------------------------------------------------
+      # 7) Upload the build as a GitHub Actions artifact
+      # ---------------------------------------------------------------
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: light-and-shadow-web
+          path: build/
+          if-no-files-found: error
+          retention-days: 7
