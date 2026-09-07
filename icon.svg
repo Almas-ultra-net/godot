@@ -1,0 +1,15 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" rx="12" fill="#131a2e"/>
+  <!-- glowing lantern -->
+  <circle cx="64" cy="52" r="30" fill="#ffb85c" opacity="0.25"/>
+  <circle cx="64" cy="52" r="18" fill="#ffd98a" opacity="0.55"/>
+  <!-- lantern body -->
+  <rect x="52" y="34" width="24" height="30" rx="4" fill="#6b4a2b"/>
+  <rect x="56" y="38" width="16" height="22" rx="3" fill="#fff1c2"/>
+  <rect x="50" y="30" width="28" height="6" rx="3" fill="#3a2a1a"/>
+  <!-- flame -->
+  <path d="M64 40 c5 6 5 12 0 15 c-5 -3 -5 -9 0 -15z" fill="#ff9a3c"/>
+  <!-- ground shadow strip -->
+  <rect x="20" y="84" width="88" height="4" fill="#0a0e18"/>
+  <path d="M36 92 h56 l-8 12 h-40 z" fill="#0a0e18"/>
+</svg>
